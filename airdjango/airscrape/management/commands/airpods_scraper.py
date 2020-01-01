@@ -2,12 +2,13 @@ from django.core.management.base import BaseCommand
 from airscrape.models import Price
 from requests_html import AsyncHTMLSession
 
-def save_price(prices)
-    stores_and_prices = prices['x']
-
+def save_price(prices):
+    stores = prices['stores_and_prices']
+    the_cheapest_price = prices['cheapest_price']
     price = Price()
-    price.stores_and_prices = x
-    price.cheapest_price
+    price.stores_and_prices = stores
+    price.cheapest_price = the_cheapest_price
+    price.save()
 
 
 asession = AsyncHTMLSession()
@@ -56,7 +57,6 @@ for price in bestbuy_price, frys_price, target_price,:
 # print(all_prices)
 
 
-
 def lowest_price():
     lowest_price = []
     low = min(all_prices)
@@ -74,8 +74,17 @@ for k, v in d.items():
     if v[1:] in my_list:
         print(k + " " + "has the cheapest set of AirPods Pro at: $" + my_list[0])
 
+all_stores = []
+out = {
+    'stores_and_prices': x,
+    'cheapest_price': k + " " + "has the cheapest set of AirPods Pro at: $" + my_list[0]
+}
 
+all_stores.append(out)
+
+for z in all_stores:
+    save_price(z)
 
 class Command(BaseCommand):
     def handle(self, **options):
-        run()
+        result()
