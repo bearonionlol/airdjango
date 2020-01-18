@@ -1,0 +1,13 @@
+{% extends 'general/base.html' %}
+
+{% block body %}
+<h1>AIRPODS</h1>
+<div>
+    <ul>
+        {% for p in prices %}
+            <li>{{ p.stores_and_prices }}: {{ p.cheapest_price }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
