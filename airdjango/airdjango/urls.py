@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from airscrape import views
 
 urlpatterns = [
     path('airscrape/', include('airscrape.urls')),
     path('admin/', admin.site.urls),
+    path('', views.index),
 ]

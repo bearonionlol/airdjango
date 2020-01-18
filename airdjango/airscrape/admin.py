@@ -5,4 +5,3 @@ from .models import Price
 class PriceAdmin(admin.ModelAdmin):
     list_display = ('stores_and_prices', 'cheapest_price')
 
-    pass

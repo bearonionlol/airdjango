@@ -6,5 +6,5 @@ class Price(models.Model):
     cheapest_price = models.CharField(max_length=200)
 
     def __str__(self):
-        # return 'asdf'
-        return self.stores_and_prices, self.cheapest_price
+        return f'{self.stores_and_prices}, {self.cheapest_price}'
+
