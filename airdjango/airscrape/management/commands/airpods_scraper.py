@@ -70,21 +70,20 @@ my_list = lowest_price()
 d = {**a, **b, **c,}
 # print([k for k, v in d.items() if v[1:] in my_list])
 
+all_stores = []
 for k, v in d.items():
     if v[1:] in my_list:
         print(k + " " + "has the cheapest set of AirPods Pro at: $" + my_list[0])
+        out = {
+            'stores_and_prices': k,
+            'cheapest_price': k + " " + "has the cheapest set of AirPods Pro at: $" + my_list[0]
+        }
+        all_stores.append(out)
 
-all_stores = []
-out = {
-    'stores_and_prices': x,
-    'cheapest_price': k + " " + "has the cheapest set of AirPods Pro at: $" + my_list[0]
-}
-
-all_stores.append(out)
-
-for z in all_stores:
-    save_price(z)
 
 class Command(BaseCommand):
     def handle(self, **options):
-        result()
+        # result()
+        print(all_stores)
+        for z in all_stores:
+            save_price(z)

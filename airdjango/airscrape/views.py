@@ -2,8 +2,11 @@
 #
 # # Create your views here.
 
-from django.http import HttpResponse
+from airscrape.models import Price
+from django.template.response import TemplateResponse
 
 
 def index(request):
-    return HttpResponse("Hi, this is where AirPods prices will be compared.")
+    query = Price.objects.all()
+    context = {'prices': query}
+    return TemplateResponse(request, 'general/index.html', context)
