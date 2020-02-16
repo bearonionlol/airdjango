@@ -21,7 +21,8 @@ def import_price(product, store, selector, needs_render=False):
 
     """
     session = HTMLSession()
-    r = session.get(product.target_url)
+    url = getattr(product, f'{store}_url')
+    r = session.get(url)
     if needs_render:
         r.html.render()
     pstring = r.html.find(selector, first=True).text
