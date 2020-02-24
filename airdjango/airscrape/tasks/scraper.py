@@ -1,10 +1,36 @@
 """airscrape/tasks/scraper.py
 """
-from airscrape.models import Price, Store
+from airscrape.models import Price, Store, Product
 from requests_html import HTMLSession
 
 
-def import_price(product, store, selector, needs_render=False):
+STORE_ARGS = {
+    'target': [
+        'div.h-text-bold[data-test="product-price"]',
+        True
+    ],
+    'bestbuy': [
+        'div.priceView-hero-price.priceView-customer-price span',
+        False
+    ],
+    'frys': [
+        'span#did_price1valuediv.net-total.net-total-price',
+        False
+    ]
+}
+
+
+def import_price_from_all(product):
+    for store, args in STORE_ARGS.items():
+        import_price(product, store)
+
+
+def import_all_product_prices():
+    for p in Product.objects.all():
+        import_price_from_all(p)
+
+
+def import_price(product, store):
     """
 
     Parameters
@@ -12,8 +38,6 @@ def import_price(product, store, selector, needs_render=False):
     product : Product Model
     store : str
         enum('target', 'bestbuy', 'frys')
-    selector : str
-    needs_render : bool
 
     Returns
     -------
@@ -23,6 +47,9 @@ def import_price(product, store, selector, needs_render=False):
     session = HTMLSession()
     url = getattr(product, f'{store}_url')
     r = session.get(url)
+    args = STORE_ARGS[store]
+    selector = args[0]
+    needs_render = args[1]
     if needs_render:
         r.html.render()
     pstring = r.html.find(selector, first=True).text
@@ -35,52 +62,4 @@ def import_price(product, store, selector, needs_render=False):
         pricemodel = Price(product=product, store=storemodel)
     pricemodel.price = price
     pricemodel.save()
-
-
-def import_target(product):
-    """Import Target product pricing into DB.
-
-    Parameters
-    ----------
-    product : Product model
-
-    Returns
-    -------
-    None
-
-    """
-    selector = 'div.h-text-bold[data-test="product-price"]'
-    import_price(product, 'target', selector, needs_render=True)
-
-
-def import_frys(product):
-    """Import Frys product pricing into DB.
-
-    Parameters
-    ----------
-    product : Product model
-
-    Returns
-    -------
-    None
-
-    """
-    selector = 'span#did_price1valuediv.net-total.net-total-price'
-    import_price(product, 'frys', selector)
-
-
-def import_bestbuy(product):
-    """Import BestBuy product pricing into DB.
-
-    Parameters
-    ----------
-    product : Product model
-
-    Returns
-    -------
-    None
-
-    """
-    selector = 'div.priceView-hero-price.priceView-customer-price span'
-    import_price(product, 'bestbuy', selector)
 

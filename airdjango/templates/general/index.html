@@ -1,13 +1,21 @@
 {% extends 'general/base.html' %}
 
 {% block body %}
-<h1>AIRPODS</h1>
 <div>
-    <ul>
-        {% for p in prices %}
-            <li>{{ p.stores_and_prices }}: {{ p.cheapest_price }}</li>
-        {% endfor %}
-    </ul>
+    <div>
+        <form action="" method='POST'>
+            {% csrf_token %}
+            <input type="submit" name='update' value='Update'>
+        </form>
+    </div>
+    {% for product in products %}
+        <h2>{{ product.name }}</h2>
+        <ul>
+            {% for price in product.price_set.all %}
+                <li>{{ price.store.name }}: {{ price.price }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
 </div>
 {% endblock %}
 
