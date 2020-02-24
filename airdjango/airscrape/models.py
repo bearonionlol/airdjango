@@ -6,7 +6,6 @@ class Price(models.Model):
     store = models.ForeignKey('Store', on_delete=models.CASCADE, null=True)
     price = models.DecimalField(max_digits=20, decimal_places=2)
 
-##prevent adding more than one price for each product and store combo
     class Meta:
         unique_together = ('product', 'store')
 
