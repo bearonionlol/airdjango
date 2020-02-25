@@ -2,8 +2,8 @@
 """
 from airscrape.models import Price, Store, Product
 from requests_html import HTMLSession
-from multiprocessing import Process, Pipe
 from multiprocessing.pool import ThreadPool
+import subprocess
 from airscrape.ext_tasks import get_rendered_html
 
 
@@ -61,11 +61,9 @@ def import_price(product, store):
     selector = args[0]
     needs_render = args[1]
     if needs_render:
-        child, parent = Pipe()
-        p = Process(target=get_rendered_html, args=(url, selector, child))
-        p.start()
-        pstring = parent.recv()
-        p.join()
+        cmd = f'python airscrape/ext_tasks.py "{url}" "{selector}"'
+        out = subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE)
+        pstring = str(out.stdout).replace('"', '').replace("'", '')[1:]
     else:
         r = session.get(url)
         pstring = r.html.find(selector, first=True).text
