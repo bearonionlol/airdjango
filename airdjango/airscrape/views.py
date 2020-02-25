@@ -17,6 +17,10 @@ from django.template.response import TemplateResponse
 from airscrape.tasks import scraper
 
 
+from airscrape.models import Price, Product
+from django.template.response import TemplateResponse
+from airscrape.tasks import scraper
+
 def index(request):
     if request.method == 'POST':
         if 'update' in request.POST:
